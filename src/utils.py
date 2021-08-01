@@ -73,7 +73,7 @@ class Proxy:
     anon_level: int = 0
 
     @property
-    def address(self):
+    def address(self) -> str:
         """Gets the full form address for the proxy used for connecting"""
         return f"{self.protocol}://{self.ip}:{self.port}"
 

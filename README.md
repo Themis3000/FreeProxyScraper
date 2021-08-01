@@ -1,5 +1,5 @@
 ### This project is currently in a non-working state and is unpublished
-The framework for this project is built up, however no plugins that implement fetching proxies from actual websites have been created yet. No tests or docs has been created yet either
+The framework for this project is built up, however there aren't many plugins. Code isn't very stable yet due to the nature of proxy websites rate limiting very quickly. Also, no tests or docs has been created yet
 
 ## FreeProxyScraper
 This is a plugin driven web scraper meant to retrieve and test free proxies for use.
@@ -14,10 +14,12 @@ pip install FreeProxyScraper
 ## Usage
 
 ```python
-import FreeProxyScraper
+from FreeProxyScraper import ProxyQuery
 
-proxies = FreeProxyScraper.find(limit=30)
-print(proxies)
+pq = ProxyQuery()
+
+for proxy in pq.find(limit=30):
+    print(proxy)
 ```
 
 ## Development
