@@ -16,6 +16,7 @@ request_headers = {
 class FreeProxy(Plugin):
     plugin_name = "free-proxy"
     plugin_url = "http://free-proxy.cz/en/"
+    enabled = False  # Disabled because this site will your ip after only a few requests currently
 
     def find(self) -> Iterator[Proxy]:
         response = requests.get("http://free-proxy.cz/en/", headers=request_headers)

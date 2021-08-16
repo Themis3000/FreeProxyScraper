@@ -4,19 +4,25 @@ import glob
 import os
 import logging
 import requests
+from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from abc import abstractmethod, ABC
-from typing import List, Iterator, Tuple
+from typing import List, Iterator, Tuple, Dict
 from types import ModuleType
 
+ua = UserAgent()
 
-session = requests.session()
 
-
-def get_soup(url: str) -> Tuple[int, BeautifulSoup]:
+def get_soup(url: str, headers: Dict[str, str] = None, random_agent: bool = True) -> Tuple[int, BeautifulSoup]:
     """handles getting a soup from a given url"""
-    page = session.get(url)
+    if headers is None:
+        headers = {}
+
+    if random_agent:
+        headers["User-Agent"] = ua.random
+
+    page = requests.get(url, headers=headers)
     return page.status_code, BeautifulSoup(page.content, 'html.parser')
 
 
@@ -85,6 +91,8 @@ class Proxy:
 
 class Plugin(ABC):
     """Represents a plugin"""
+    enabled = True
+
     @property
     @abstractmethod
     def plugin_url(self):
@@ -139,11 +147,16 @@ class Plugins:
         # Test plugins and import them if working
         for plugin_class in plugins:
             plugin = plugin_class()
+
+            if not plugin.enabled:
+                continue
+
             if do_test:
                 if not plugin.test():
                     logging.warning(f"Plugin {plugin.plugin_name} at {path} does not seem to be working, and therefore "
                                     f"was not loaded")
                     continue
+
             self.plugins.append(plugin)
 
     def import_plugin_files(self, dir_path: str, do_test: bool = True) -> None:

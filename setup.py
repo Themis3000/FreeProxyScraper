@@ -21,7 +21,8 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=[
         "requests",
-        "beautifulsoup4"
+        "beautifulsoup4",
+        "fake-useragent"
     ],
     extras_require={
         "dev": [
