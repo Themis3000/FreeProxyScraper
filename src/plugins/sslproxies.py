@@ -1,7 +1,6 @@
 from src.utils import Proxy, Plugin
 from typing import Iterator
 from bs4 import BeautifulSoup
-import requests
 
 anon_dict = {"elite proxy": 2, "anonymous": 1, "transparent": 0}
 

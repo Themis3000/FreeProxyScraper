@@ -1,4 +1,4 @@
-from src.utils import Proxy, Plugin
+from src.utils import Proxy, Plugin, get_soup
 from typing import Iterator
 from bs4 import BeautifulSoup
 import requests
@@ -19,8 +19,10 @@ class FreeProxy(Plugin):
     enabled = False  # Disabled because this site will your ip after only a few requests currently
 
     def find(self) -> Iterator[Proxy]:
-        response = requests.get("http://free-proxy.cz/en/", headers=request_headers)
-        soup = BeautifulSoup(response.content)
+        response_code, soup = get_soup("http://free-proxy.cz/en/", headers=request_headers)
+
+        if response_code != 200:
+            return
 
         table_elements = soup.select("table#proxy_list > tbody > tr")
         for element in table_elements:

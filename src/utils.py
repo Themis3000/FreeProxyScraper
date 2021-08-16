@@ -46,6 +46,7 @@ def get_classes_with_parent(module: ModuleType, parent_class: type) -> List[type
 
 class GenLimiter:
     """A decorator used to limit the amount of iterations possible from a generator"""
+
     def __init__(self, func):
         self.func = func
 
@@ -57,6 +58,7 @@ class GenLimiter:
     def __get__(self, instance, owner):
         def wrapper(*args, **kwargs):
             return self.__call__(instance, *args, **kwargs)
+
         return wrapper
 
     def __iter__(self):
@@ -92,6 +94,7 @@ class Proxy:
 class Plugin(ABC):
     """Represents a plugin"""
     enabled = True
+    fails = 0
 
     @property
     @abstractmethod
@@ -109,7 +112,10 @@ class Plugin(ABC):
 
     def test(self) -> bool:
         """Tests if the plugin is working"""
-        return not next(self.find(), None) is None
+        try:
+            return not next(self.find(), None) is None
+        except:
+            return False
 
     def find_filter(self, country: str = None, ping: int = None, min_anon_level: int = 0) -> Iterator[Proxy]:
         """Finds proxies that meet certain values"""
@@ -129,6 +135,7 @@ class Plugin(ABC):
 
 class Plugins:
     """Represents a pool of plugins and handles the loading of them"""
+
     def __init__(self, import_plugins=True):
         self.plugins = []
         if import_plugins:
