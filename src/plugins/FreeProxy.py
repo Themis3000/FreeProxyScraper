@@ -8,8 +8,7 @@ import base64
 anon_dict = {"High anonymity": 2, "Anonymous": 1, "Transparent": 0}
 request_headers = {
     "Accept": "http://free-proxy.cz/en/",
-    "Host": "free-proxy.cz",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0"
+    "Host": "free-proxy.cz"
 }
 
 
@@ -22,6 +21,7 @@ class FreeProxy(Plugin):
         response_code, soup = get_soup("http://free-proxy.cz/en/", headers=request_headers)
 
         if response_code != 200:
+            self.report_fail()
             return
 
         table_elements = soup.select("table#proxy_list > tbody > tr")

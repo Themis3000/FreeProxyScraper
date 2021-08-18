@@ -14,15 +14,14 @@ from types import ModuleType
 ua = UserAgent()
 
 
-def get_soup(url: str, headers: Dict[str, str] = None, random_agent: bool = True) -> Tuple[int, BeautifulSoup]:
+def get_soup(url: str, random_agent: bool = True, **kwargs) -> Tuple[int, BeautifulSoup]:
     """handles getting a soup from a given url"""
-    if headers is None:
-        headers = {}
-
     if random_agent:
-        headers["User-Agent"] = ua.random
+        if "headers" not in kwargs:
+            kwargs["headers"] = {}
+        kwargs["headers"]["User-Agent"] = ua.random
 
-    page = requests.get(url, headers=headers)
+    page = requests.get(url, **kwargs)
     return page.status_code, BeautifulSoup(page.content, 'html.parser')
 
 
@@ -46,7 +45,6 @@ def get_classes_with_parent(module: ModuleType, parent_class: type) -> List[type
 
 class GenLimiter:
     """A decorator used to limit the amount of iterations possible from a generator"""
-
     def __init__(self, func):
         self.func = func
 
@@ -58,7 +56,6 @@ class GenLimiter:
     def __get__(self, instance, owner):
         def wrapper(*args, **kwargs):
             return self.__call__(instance, *args, **kwargs)
-
         return wrapper
 
     def __iter__(self):
@@ -95,16 +92,8 @@ class Plugin(ABC):
     """Represents a plugin"""
     enabled = True
     fails = 0
-
-    @property
-    @abstractmethod
-    def plugin_url(self):
-        """Returns the website url that proxies are being pulled from"""
-
-    @property
-    @abstractmethod
-    def plugin_name(self):
-        """Returns the name of the plugin"""
+    plugin_url: str
+    plugin_name: str
 
     @abstractmethod
     def find(self) -> Iterator[Proxy]:
@@ -132,10 +121,14 @@ class Plugin(ABC):
             # Only yields proxy if all tests where passed
             yield proxy
 
+    @classmethod
+    def report_fail(cls):
+        """Reports a failed request, must be utilized in child classes"""
+        cls.fails += 1
+
 
 class Plugins:
     """Represents a pool of plugins and handles the loading of them"""
-
     def __init__(self, import_plugins=True):
         self.plugins = []
         if import_plugins:
