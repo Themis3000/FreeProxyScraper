@@ -17,7 +17,7 @@ class ProxyQuery(Plugins):
                 return_iter = method(*args, **kwargs)
                 for value in return_iter:
                     yield value
-            except:
+            except Exception:
                 continue
 
     def find_proxies(self, limit: int = -1) -> Iterator[Proxy]:

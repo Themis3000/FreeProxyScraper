@@ -103,7 +103,7 @@ class Plugin(ABC):
         """Tests if the plugin is working"""
         try:
             return not next(self.find(), None) is None
-        except:
+        except Exception:
             return False
 
     def find_filter(self, country: str = None, ping: int = None, min_anon_level: int = 0) -> Iterator[Proxy]:
@@ -129,13 +129,13 @@ class Plugin(ABC):
 
 class Plugins:
     """Represents a pool of plugins and handles the loading of them"""
-    def __init__(self, import_plugins=True):
+    def __init__(self, import_plugins=True, do_tests=False):
         self.plugins = []
         if import_plugins:
             plugin_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "plugins")
-            self.import_plugin_files(plugin_folder)
+            self.import_plugin_files(plugin_folder, do_tests)
 
-    def import_plugin_file(self, path: str, do_test: bool = True) -> None:
+    def import_plugin_file(self, path: str, do_test: bool = False) -> None:
         """Imports plugins from a file given a path. do_test first tests if a plugin is working before loading it. If
         the plugin does not pass the test, it is not loaded"""
         # Loads file
@@ -158,7 +158,7 @@ class Plugins:
 
             self.plugins.append(plugin)
 
-    def import_plugin_files(self, dir_path: str, do_test: bool = True) -> None:
+    def import_plugin_files(self, dir_path: str, do_test: bool = False) -> None:
         """Imports all .py files in a directory as plugins"""
         plugin_paths = glob.glob(os.path.join(dir_path, "*.py"))
         for path in plugin_paths:
