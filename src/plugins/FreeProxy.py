@@ -14,7 +14,7 @@ class FreeProxy(Plugin):
     enabled = False  # Disabled because this site will your ip after only a few requests currently
 
     def find(self) -> Iterator[Proxy]:
-        response_code, soup = get_soup("http://free-proxy.cz/en/", headers=request_headers)
+        response_code, soup = get_soup("http://free-proxy.cz/en/")
 
         if response_code != 200:
             self.report_fail()
