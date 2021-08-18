@@ -6,10 +6,6 @@ import base64
 
 
 anon_dict = {"High anonymity": 2, "Anonymous": 1, "Transparent": 0}
-request_headers = {
-    "Accept": "http://free-proxy.cz/en/",
-    "Host": "free-proxy.cz"
-}
 
 
 class FreeProxy(Plugin):

@@ -151,11 +151,10 @@ class Plugins:
             if not plugin.enabled:
                 continue
 
-            if do_test:
-                if not plugin.test():
-                    logging.warning(f"Plugin {plugin.plugin_name} at {path} does not seem to be working, and therefore "
-                                    f"was not loaded")
-                    continue
+            if do_test and not plugin.test():
+                logging.warning(f"Plugin {plugin.plugin_name} at {path} does not seem to be working, and therefore "
+                                f"was not loaded")
+                continue
 
             self.plugins.append(plugin)
 
