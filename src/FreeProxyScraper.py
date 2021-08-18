@@ -6,12 +6,13 @@ class ProxyQuery(Plugins):
     """Handles the querying and operations of plugins"""
 
     @GenLimiter
-    def exec_iter_plugin(self, method_name: str, sort_asc_fails: bool = False, *args, **kwargs) -> Iterator[Proxy]:
+    def exec_iter_plugin(self, method_name: str, sort_asc_fails: bool = True, *args, **kwargs) -> Iterator[Proxy]:
         """Executes a given method in all plugins that return an iterable, then returns an iterable that loops through
         each plugins iterable"""
-        plugins = self.plugins.sort(key=lambda plugin: plugin.fails) if sort_asc_fails else self.plugins
+        if sort_asc_fails:
+            self.plugins.sort(key=lambda plugin: plugin.fails)
 
-        for plugin in plugins:
+        for plugin in self.plugins:
             try:
                 method = getattr(plugin, method_name)
                 return_iter = method(*args, **kwargs)
