@@ -9,7 +9,7 @@ anon_dict = {"High anonymity": 2, "Anonymous": 1, "Transparent": 0}
 class FreeProxy(Plugin):
     plugin_name = "free-proxy"
     plugin_url = "http://free-proxy.cz/en/"
-    enabled = False  # Disabled because this site will your ip after only a few requests currently
+    fails = 1  # This site is slow, so this is a quick hack in order to deprioritize it so it's a fallback only
 
     def find(self) -> Iterator[Proxy]:
         response_code, soup = get_soup("http://free-proxy.cz/en/")

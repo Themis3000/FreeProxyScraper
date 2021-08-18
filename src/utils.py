@@ -4,25 +4,32 @@ import glob
 import os
 import logging
 import requests
+import traceback
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from abc import abstractmethod, ABC
-from typing import List, Iterator, Tuple
+from typing import List, Iterator, Tuple, Union
 from types import ModuleType
 
 ua = UserAgent()
 
 
-def get_soup(url: str, random_agent: bool = True, **kwargs) -> Tuple[int, BeautifulSoup]:
+def get_soup(url: str, random_agent: bool = True, **kwargs) -> Tuple[int, Union[None, BeautifulSoup]]:
     """handles getting a soup from a given url"""
     if random_agent:
         if "headers" not in kwargs:
             kwargs["headers"] = {}
         kwargs["headers"]["User-Agent"] = ua.random
 
-    page = requests.get(url, **kwargs)
-    return page.status_code, BeautifulSoup(page.content, 'html.parser')
+    try:
+        page = requests.get(url, **kwargs)
+        soup = BeautifulSoup(page.content, 'html.parser')
+    except requests.RequestException:
+        return 418, None
+    except Exception:
+        return page.status_code, None
+    return page.status_code, soup
 
 
 def get_classes(module: ModuleType) -> List[type]:
@@ -104,6 +111,7 @@ class Plugin(ABC):
         try:
             return not next(self.find(), None) is None
         except Exception:
+            traceback.print_exc()
             return False
 
     def find_filter(self, country: str = None, ping: int = None, min_anon_level: int = 0) -> Iterator[Proxy]:

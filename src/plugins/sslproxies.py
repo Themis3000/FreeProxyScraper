@@ -1,20 +1,21 @@
-from src.utils import Proxy, Plugin
+from src.utils import Proxy, Plugin, get_soup
 from typing import Iterator
-from bs4 import BeautifulSoup
 
 anon_dict = {"elite proxy": 2, "anonymous": 1, "transparent": 0}
 
 
-# This plugin current is non working
 class SslProxies(Plugin):
     plugin_name = "sslproxies"
     plugin_url = "https://www.sslproxies.org/"
 
     def find(self) -> Iterator[Proxy]:
-        with open("D:\pycharm\FreeProxyScraper\src\plugins\ssl.html", "r", encoding="utf-8") as f:
-            soup = BeautifulSoup(f, "html.parser")
+        response_code, soup = get_soup("https://www.sslproxies.org/")
 
-        elements = soup.select("table#proxylisttable > tbody > tr")
+        if response_code != 200:
+            self.report_fail()
+            return
+
+        elements = soup.select("table > tbody > tr")
         for element in elements:
             entries = element.findChildren(recursive=False)
             yield Proxy(

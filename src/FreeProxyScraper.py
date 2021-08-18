@@ -1,3 +1,4 @@
+import traceback
 from src.utils import Plugins, GenLimiter, Proxy
 from typing import Iterator
 
@@ -19,6 +20,7 @@ class ProxyQuery(Plugins):
                 for value in return_iter:
                     yield value
             except Exception:
+                traceback.print_exc()
                 continue
 
     def find_proxies(self, limit: int = -1) -> Iterator[Proxy]:
