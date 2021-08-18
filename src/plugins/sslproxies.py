@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 anon_dict = {"elite proxy": 2, "anonymous": 1, "transparent": 0}
 
 
+# This plugin current is non working
 class SslProxies(Plugin):
     plugin_name = "sslproxies"
     plugin_url = "https://www.sslproxies.org/"

@@ -8,7 +8,7 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from abc import abstractmethod, ABC
-from typing import List, Iterator, Tuple, Dict
+from typing import List, Iterator, Tuple
 from types import ModuleType
 
 ua = UserAgent()

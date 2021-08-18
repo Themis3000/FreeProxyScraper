@@ -1,7 +1,5 @@
 from src.utils import Proxy, Plugin, get_soup
 from typing import Iterator
-from bs4 import BeautifulSoup
-import requests
 import base64
 
 
