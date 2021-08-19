@@ -25,6 +25,8 @@ for proxy in pq.find(limit=20):
 ## List of sites implemented for scraping:
 - https://www.sslproxies.org/
 - http://free-proxy.cz/en/
+- https://spys.one/en/
+- https://hidemy.name/en/proxy-list/
 
 ## FAQ
 - When will this be published?
