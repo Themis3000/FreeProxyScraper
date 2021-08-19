@@ -1,5 +1,4 @@
 import re
-from bs4 import BeautifulSoup
 from src.utils import Proxy, Plugin, get_soup
 from typing import Iterator, Dict
 
