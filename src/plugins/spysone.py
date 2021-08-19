@@ -77,11 +77,11 @@ def convert_decode(script: str) -> Dict[str, int]:
 # Process script that injects the port number into the dom
 def process_script(script: str, values: Dict[str, int]) -> int:
     output = ""
-    trimmed_script = script[22:-2]
-    operations = trimmed_script.split(") + (")
+    trimmed_script = script[20:-2]
+    operations = trimmed_script.split(")+(")
 
     for operation in operations:
-        names = operation.split(" ^ ")
+        names = operation.split("^")
         output += str(values[names[0]] ^ values[names[1]])
 
     return int(output)
@@ -90,14 +90,17 @@ def process_script(script: str, values: Dict[str, int]) -> int:
 # uses decoder and converts js decoder to retrieve values
 def process_decode_str(decoder_str: str) -> Dict[str, int]:
     # Sanitized decoder of the actual function, leaving just the parameters. Removes any quotes from parameters
-    params = decoder_str[329:-23].replace("'", "").split(",")
+    params = decoder_str[329:-24].replace("'", "").split(",")
     decode = decoder(params[0],
-                     int(params[1]),
-                     int(params[2]),
-                     params[3][:-16].split('\u005e'),
-                     int(params[4]),
-                     dict(params[5]))
+                     60,
+                     60,
+                     params[3].split('\u005e'),
+                     0,
+                     {})
     return convert_decode(decode)
+
+
+anon_dict = {"HIA": 2, "ANM": 1, "NOA": 0}
 
 
 class Spysone(Plugin):
@@ -105,7 +108,22 @@ class Spysone(Plugin):
     plugin_url = "https://spys.one/en/"
 
     def find(self) -> Iterator[Proxy]:
-        with open("./spys.html", "r", encoding="utf-8") as f:
-            soup = BeautifulSoup(f.read())
+        status_code, soup = get_soup("https://spys.one/en/")
 
+        if status_code != 200:
+            self.report_fail()
+            return
 
+        script_string = soup.select_one("body > script").string
+        values = process_decode_str(script_string)
+
+        for element in soup.select("tr.spy1x[onmouseover],tr.spy1xx[onmouseover]"):
+            entries = element.findChildren(recursive=False)
+            port_coded = entries[0].font.script.string
+            yield Proxy(
+                ip=entries[0].text.strip(),
+                port=process_script(port_coded, values),
+                protocol=entries[1].text.lower(),
+                anon_level=anon_dict[entries[2].text],
+                country=entries[3].text
+            )
