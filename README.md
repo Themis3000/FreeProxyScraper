@@ -22,6 +22,10 @@ for proxy in pq.find(limit=20):
     print(proxy)
 ```
 
+## List of sites implemented for scraping:
+- https://www.sslproxies.org/
+- http://free-proxy.cz/en/
+
 ## Development
 to install FreeProxyScraper, along with the tools you need to develop, run the following in the directory containing this repo:
 
