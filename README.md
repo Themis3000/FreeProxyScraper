@@ -1,7 +1,7 @@
 # FreeProxyScraper
 This is a plugin driven web scraper meant to retrieve and test free proxies for use. Note that this package may be unstable and should not be used in a production environment.
 
-## Installation (This doesn't work yet)
+## Installation
 Run the following to install:
 
 ```bash
@@ -15,7 +15,7 @@ from FreeProxyScraper import ProxyQuery
 
 pq = ProxyQuery()
 
-for proxy in pq.find(limit=20):
+for proxy in pq.find_proxies(limit=20):
     print(proxy)
 ```
 
