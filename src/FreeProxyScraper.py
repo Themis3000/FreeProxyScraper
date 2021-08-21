@@ -1,5 +1,6 @@
 import logging
-from utils import Plugins, GenLimiter, Proxy
+from utils.plugins import Plugins, Proxy
+from utils.decos import GenLimiter
 from typing import Iterator
 
 

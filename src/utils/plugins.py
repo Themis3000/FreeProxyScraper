@@ -3,33 +3,11 @@ import importlib.util
 import glob
 import os
 import logging
-import requests
 import traceback
-from fake_useragent import UserAgent
-from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from abc import abstractmethod, ABC
-from typing import List, Iterator, Tuple, Union
+from typing import List, Iterator
 from types import ModuleType
-
-ua = UserAgent()
-
-
-def get_soup(url: str, random_agent: bool = True, **kwargs) -> Tuple[int, Union[None, BeautifulSoup]]:
-    """handles getting a soup from a given url"""
-    if random_agent:
-        if "headers" not in kwargs:
-            kwargs["headers"] = {}
-        kwargs["headers"]["User-Agent"] = ua.random
-
-    try:
-        page = requests.get(url, **kwargs)
-        soup = BeautifulSoup(page.content, 'html.parser')
-    except requests.RequestException:
-        return 418, None
-    except Exception:
-        return page.status_code, None
-    return page.status_code, soup
 
 
 def get_classes(module: ModuleType) -> List[type]:
@@ -48,31 +26,6 @@ def class_has_parent(_class: type, parent_class: type) -> bool:
 def get_classes_with_parent(module: ModuleType, parent_class: type) -> List[type]:
     """Gets classes in a module with a given parent"""
     return [_class for _class in get_classes(module) if class_has_parent(_class, parent_class)]
-
-
-class GenLimiter:
-    """A decorator used to limit the amount of iterations possible from a generator"""
-    def __init__(self, func):
-        self.func = func
-
-    def __call__(self, *args, **kwargs):
-        self.limit = kwargs.pop("limit", -1)
-        self.gen = self.func(*args, **kwargs)
-        return self
-
-    def __get__(self, instance, owner):
-        def wrapper(*args, **kwargs):
-            return self.__call__(instance, *args, **kwargs)
-        return wrapper
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.limit == 0:
-            raise StopIteration()
-        self.limit -= 1
-        return next(self.gen)
 
 
 @dataclass
@@ -135,7 +88,7 @@ class Plugins:
     def __init__(self, import_plugins=True, do_tests=False):
         self.plugins = []
         if import_plugins:
-            plugin_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "plugins")
+            plugin_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../plugins")
             self.import_plugin_files(plugin_folder, do_tests)
 
     def import_plugin_file(self, path: str, do_test: bool = False) -> None:
