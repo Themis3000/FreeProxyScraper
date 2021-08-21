@@ -1,4 +1,4 @@
-import traceback
+import logging
 from src.utils import Plugins, GenLimiter, Proxy
 from typing import Iterator
 
@@ -20,7 +20,8 @@ class ProxyQuery(Plugins):
                 for value in return_iter:
                     yield value
             except Exception:
-                traceback.print_exc()
+                logging.info(f"FreeProxyScraper plugin \"{plugin.plugin_name}\" has crashed")
+                plugin.report_fail()
                 continue
 
     def find_proxies(self, limit: int = -1) -> Iterator[Proxy]:

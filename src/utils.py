@@ -89,11 +89,6 @@ class Proxy:
         """Gets the full form address for the proxy used for connecting"""
         return f"{self.protocol}://{self.ip}:{self.port}"
 
-    def test(self) -> bool:
-        """Tests the proxy to see if it's operational"""
-        # todo implement proxy test method
-        return True
-
 
 class Plugin(ABC):
     """Represents a plugin"""
