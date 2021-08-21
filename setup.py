@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="FreeProxyScraper",
-    version="0.1.1",
+    version="0.1.2",
     description="A plugin driven package that scrapes sites for free proxies",
     py_modules=["FreeProxyScraper"],
     package_dir={"": "src"},
@@ -30,7 +30,7 @@ setup(
             "pytest"
         ]
     },
-    url="https://github.com/themis3000/fillinthis",
+    url="https://github.com/Themis3000/FreeProxyScraper",
     author="Themi Megas",
     author_email="tcm4760@gmail.com"
 )
