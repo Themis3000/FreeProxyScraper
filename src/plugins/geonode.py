@@ -1,5 +1,5 @@
 import requests
-from src.utils import Proxy, Plugin
+from ..utils import Proxy, Plugin
 from typing import Iterator
 
 

@@ -1,4 +1,4 @@
-from src.utils import Proxy, Plugin, get_soup
+from ..utils import Proxy, Plugin, get_soup
 from typing import Iterator
 
 anon_dict = {"elite proxy": 2, "anonymous": 1, "transparent": 0}

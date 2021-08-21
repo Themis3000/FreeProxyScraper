@@ -1,5 +1,5 @@
 import logging
-from src.utils import Plugins, GenLimiter, Proxy
+from utils import Plugins, GenLimiter, Proxy
 from typing import Iterator
 
 

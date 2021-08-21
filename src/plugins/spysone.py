@@ -1,5 +1,5 @@
 import re
-from src.utils import Proxy, Plugin, get_soup
+from ..utils import Proxy, Plugin, get_soup
 from typing import Iterator, Dict
 
 
