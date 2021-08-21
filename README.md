@@ -1,8 +1,5 @@
-### This project is currently unpublished
-The framework for this project is built up, however there aren't many plugins. The code isn't very stable yet due to the nature of proxy websites rate limiting very quickly. Also, no tests or docs has been created yet. Despite all this, this project *should* be in a working condition.
-
-## FreeProxyScraper
-This is a plugin driven web scraper meant to retrieve and test free proxies for use.
+# FreeProxyScraper
+This is a plugin driven web scraper meant to retrieve and test free proxies for use. Note that this package may be unstable and should not be used in a production environment.
 
 ## Installation (This doesn't work yet)
 Run the following to install:
