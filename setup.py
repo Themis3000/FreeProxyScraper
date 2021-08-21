@@ -5,11 +5,11 @@ with open("README.md", "r") as f:
 
 setup(
     name="FreeProxyScraper",
-    version="0.1.0",
+    version="0.1.1",
     description="A plugin driven package that scrapes sites for free proxies",
     py_modules=["FreeProxyScraper"],
     package_dir={"": "src"},
-    packages=["utils"],
+    packages=["utils", "plugins"],
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
