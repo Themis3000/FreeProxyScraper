@@ -15,9 +15,20 @@ import FreeProxyScraper
 
 pq = FreeProxyScraper.ProxyQuery()
 
+# Returns any proxy's found
 for proxy in pq.find_proxies(limit=20):
     print(proxy)
+
+# Returns only proxies that are anonymous or "elite"
+for proxy in pq.find_filter(limit=20, min_anon_level=1):
+    print(proxy)
 ```
+
+There are 3 anonymity levels, indicated as integers between 0-2.
+
+- Level 0: Transparent. The end server can see your real ip even though it's being routed through a proxy
+- Level 1: Anonymous. The end server knows you are using a proxy, but does not know your real ip
+- Level 2: High Anonymity, also sometimes called "elite". The end server does not know you are using a proxy or know your real ip. The end server may have a database known proxies, so they still may know that you are using a proxy by matching your ip against such a database.
 
 ## List of sites implemented for scraping:
 - https://www.sslproxies.org/
