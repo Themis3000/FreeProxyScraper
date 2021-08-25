@@ -7,6 +7,8 @@ anon_dict = {"transparent": 0, "anonymous": 1, "elite": 2}
 
 
 class GeoNode(Plugin):
+    # Disabled because the website almost always lies about the anominity of proxies
+    enabled = False
     plugin_name = "Geonode"
     plugin_url = "https://geonode.com/free-proxy-list"
 

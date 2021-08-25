@@ -3,6 +3,7 @@ import importlib.util
 import glob
 import os
 import logging
+import requests
 from dataclasses import dataclass
 from abc import abstractmethod, ABC
 from typing import List, Iterator
@@ -42,16 +43,17 @@ class Proxy:
         return f"{self.protocol}://{self.ip}:{self.port}"
 
     def test_transparency(self, url="https://request-reflect.herokuapp.com/") -> bool:
-        """Tests if the proxy is transparent or not"""
+        """Tests if the proxy is transparent or not, returns True if transparent"""
         proxies = {"http": self.address,
                    "https": self.address}
         try:
             response = requests.get(url, proxies=proxies)
+            json = response.json()
         except Exception as e:
             # Assumes false if unable to verify
-            return False
+            return True
 
-        return "X-Forwarded-For" in response.json().get("headers", {})
+        return "X-Forwarded-For" in json.get("headers", {})
 
     def test(self, url="https://request-reflect.herokuapp.com/"):
         """
