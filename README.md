@@ -42,6 +42,10 @@ There are 3 anonymity levels, indicated as integers between 0-2.
 
 Websites are always changing, or going down, or banning ip's very quickly. In order to make sure this package stays reliable it is essential that it implements many websites
 
+- I want to make sure that I am truly not using transparent proxies, how do I know the websites being scraped from aren't lying abut the anonymity of the proxies?
+
+By default, all proxies will be checked if they are transparent or not before ever giving them to you if you specified a higher anon_level then 0. There's no need to worry, your ip should be safe.
+
 ## Development
 to install FreeProxyScraper, along with the tools you need to develop, run the following in the directory containing this repo:
 

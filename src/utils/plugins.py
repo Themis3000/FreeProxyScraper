@@ -3,7 +3,6 @@ import importlib.util
 import glob
 import os
 import logging
-import traceback
 from dataclasses import dataclass
 from abc import abstractmethod, ABC
 from typing import List, Iterator
@@ -42,6 +41,28 @@ class Proxy:
         """Gets the full form address for the proxy used for connecting"""
         return f"{self.protocol}://{self.ip}:{self.port}"
 
+    def test_transparency(self, url="https://request-reflect.herokuapp.com/") -> bool:
+        """Tests if the proxy is transparent or not"""
+        proxies = {"http": self.address,
+                   "https": self.address}
+        try:
+            response = requests.get(url, proxies=proxies)
+        except Exception as e:
+            # Assumes false if unable to verify
+            return False
+
+        return "X_FORWARDED_FOR" in response.json().get("headers", {})
+
+    def test(self, url="https://request-reflect.herokuapp.com/"):
+        """
+        Returns true if the proxy is either claimed to be transparent or it's verifyably not transparent
+        (checks if the proxy is lying about the anon level)
+        """
+        if self.anon_level == 0:
+            return True
+
+        return not self.test_transparency(url)
+
 
 class Plugin(ABC):
     """Represents a plugin"""
@@ -59,7 +80,6 @@ class Plugin(ABC):
         try:
             return not next(self.find(), None) is None
         except Exception:
-            traceback.print_exc()
             return False
 
     def find_filter(self, country: str = None, ping: int = None, min_anon_level: int = 0) -> Iterator[Proxy]:

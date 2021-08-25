@@ -25,11 +25,27 @@ class ProxyQuery(Plugins):
                 plugin.report_fail()
                 continue
 
-    def find_proxies(self, limit: int = -1) -> Iterator[Proxy]:
+    def find_proxies(self, limit: int = -1, test: bool = True) -> Iterator[Proxy]:
         """Uses all plugins to search for proxies"""
-        return self.exec_iter_plugin("find", True, limit=limit)
+        proxies = self.exec_iter_plugin("find", True, limit=limit)
+
+        if test:
+            return self.test_plugins(proxies)
+
+        return proxies
 
     def find_filter(self, limit: int = -1, country: str = None, ping: int = None,
-                    min_anon_level: int = 0) -> Iterator[Proxy]:
+                    min_anon_level: int = 0, test: bool = True) -> Iterator[Proxy]:
         """Uses all plugins to finds proxies that meet certain values"""
-        return self.exec_iter_plugin("find_filter", True, country, ping, min_anon_level, limit=limit)
+        proxies = self.exec_iter_plugin("find_filter", True, country, ping, min_anon_level, limit=limit)
+
+        if test:
+            return self.test_plugins(proxies)
+
+        return proxies
+
+    def test_plugins(self, proxies: Iterator[Proxy]) -> Iterator[Proxy]:
+        """Takes a iterator of Proxy and returns a generator that skips over every plugin that failed the test"""
+        for proxy in proxies:
+            if proxy.test():
+                yield proxy
