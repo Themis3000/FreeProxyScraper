@@ -51,7 +51,7 @@ class Proxy:
             # Assumes false if unable to verify
             return False
 
-        return "X_FORWARDED_FOR" in response.json().get("headers", {})
+        return "X-Forwarded-For" in response.json().get("headers", {})
 
     def test(self, url="https://request-reflect.herokuapp.com/"):
         """
