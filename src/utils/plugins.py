@@ -42,20 +42,29 @@ class Proxy:
         """Gets the full form address for the proxy used for connecting"""
         return f"{self.protocol}://{self.ip}:{self.port}"
 
-    def test_transparency(self, url="https://request-reflect.herokuapp.com/") -> bool:
+    def test_transparency(self, url="http://themiserver.duckdns.org:5001/") -> bool:
         """Tests if the proxy is transparent or not, returns True if transparent"""
         proxies = {"http": self.address,
                    "https": self.address}
         try:
-            response = requests.get(url, proxies=proxies)
-            json = response.json()
+            # Gets the real ip adress (makes request without a proxy)
+            response = requests.get(url)
+            real_ip = response.json()["req_ip"]
+
+            proxy_response = requests.get(url, proxies=proxies)
+            json = proxy_response.json()["headers"]
         except Exception as e:
             # Assumes false if unable to verify
             return True
 
-        return "X-Forwarded-For" in json.get("headers", {})
+        # Checks if the real ip shows anywhere in the respose headers to verify that the proxy if truly anonomus
+        for key, value in json.items():
+            if real_ip in key or real_ip in value:
+                return True
 
-    def test(self, url="https://request-reflect.herokuapp.com/"):
+        return False
+
+    def test(self, url="http://themiserver.duckdns.org:5001/"):
         """
         Returns true if the proxy is either claimed to be transparent or it's verifyably not transparent
         (checks if the proxy is lying about the anon level)
