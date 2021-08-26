@@ -1,15 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(
     name="FreeProxyScraper",
-    version="0.1.6",
+    version="0.1.8",
     description="A plugin driven package that scrapes sites for free proxies",
     py_modules=["FreeProxyScraper"],
     package_dir={"": "src"},
-    packages=["utils", "plugins"],
+    packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -34,4 +34,3 @@ setup(
     author="Themi Megas",
     author_email="tcm4760@gmail.com"
 )
-
