@@ -8,7 +8,6 @@ setup(
     version="0.1.8",
     description="A plugin driven package that scrapes sites for free proxies",
     py_modules=["FreeProxyScraper"],
-    package_dir={"": "src"},
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3.7",
