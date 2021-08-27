@@ -1,5 +1,5 @@
-from utils.plugins import Proxy, Plugin
-from utils.soup import get_soup
+from ..utils.plugins import Proxy, Plugin
+from ..utils.soup import get_soup
 from typing import Iterator
 
 example_proxy_data = [{"ip": "18.345.23.653", "port": 543, "country": "United States", "anon_level": 1, "protocol": "https", "ping": 43},
