@@ -38,6 +38,11 @@ There are 3 anonymity levels, indicated as integers between 0-2.
 - https://geonode.com/free-proxy-list
 
 ## FAQ
+
+- Help! It isn't working!
+
+Proxies are checked to see if they are truely transparent or not automatically by making a request to a remote http server, which returns information on what the recived request looked like. This package uses http://themiserver.duckdns.org:5001/ in order to achive that. The http server is ran from my home, so it may have outages here and there if I ever need to restart my server. If you need to know that this package will behave in a stable way, use test=False when invoking the find_filter method. e.g. `find_filter(limit=20, min_anon_level=1, test=False)`
+
 - Why implement so many websites for scraping?
 
 Websites are always changing, or going down, or banning ip's very quickly. In order to make sure this package stays reliable it is essential that it implements many websites
